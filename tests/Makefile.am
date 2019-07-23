@@ -13,6 +13,7 @@ TESTS+= test2.test
 TESTS+= test4.test
 TESTS+= testReplaceExisting.test
 TESTS+= test_parse_int64.test
+TESTS+= test_deep_copy.test
 TESTS+= test_null.test
 TESTS+= test_cast.test
 TESTS+= test_double_serializer.test
@@ -25,6 +26,7 @@ TESTS+= test_compare.test
 TESTS+= test_set_value.test
 TESTS+= test_visit.test
 TESTS+= test_json_pointer.test
+TESTS+= test_int_add.test
 
 check_PROGRAMS=
 check_PROGRAMS += $(TESTS:.test=)
@@ -52,10 +54,11 @@ EXTRA_DIST+= test2Formatted_plain.expected
 EXTRA_DIST+= test2Formatted_pretty.expected
 EXTRA_DIST+= test2Formatted_spaced.expected
 
-test_util_file_SOURCES = test_util_file.c strerror_override.c
+test_util_file_SOURCES = test_util_file.c
 
 testsubdir=testSubDir
 TESTS_ENVIRONMENT       = top_builddir=$(top_builddir)
 
 distclean-local:
 	-rm -rf $(testsubdir)
+	-rm -f *.vg.out

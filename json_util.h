@@ -9,6 +9,10 @@
  *
  */
 
+/**
+ * @file
+ * @brief Miscllaneous utility functions and macros.
+ */ 
 #ifndef _json_util_h_
 #define _json_util_h_
 
@@ -34,7 +38,7 @@ extern "C" {
  * Read the full contents of the given file, then convert it to a
  * json_object using json_tokener_parse().
  *
- * Returns -1 if something fails.  See json_util_get_last_err() for details.
+ * Returns NULL on failure.  See json_util_get_last_err() for details.
  */
 extern struct json_object* json_object_from_file(const char *filename);
 
@@ -46,7 +50,7 @@ extern struct json_object* json_object_from_file(const char *filename);
  * Note, that the fd must be readable at the actual position, i.e.
  * use lseek(fd, 0, SEEK_SET) before.
  *
- * Returns -1 if something fails.  See json_util_get_last_err() for details.
+ * Returns NULL on failure.  See json_util_get_last_err() for details.
  */
 extern struct json_object* json_object_from_fd(int fd);
 
@@ -67,7 +71,20 @@ extern int json_object_to_file(const char *filename, struct json_object *obj);
 extern int json_object_to_file_ext(const char *filename, struct json_object *obj, int flags);
 
 /**
- * Return the last error from json_object_to_file{,_ext} or
+ * Convert the json_object to a string and write it to the file descriptor.
+ * Handles partial writes and will keep writing until done, or an error
+ * occurs.
+ *
+ * @param fd an open, writable file descriptor to write to
+ * @param obj the object to serializer and write
+ * @param flags flags to pass to json_object_to_json_string_ext()
+ * @return -1 if something fails.  See json_util_get_last_err() for details.
+ */
+extern int json_object_to_fd(int fd, struct json_object *obj, int flags);
+
+/**
+ * Return the last error from various json-c functions, including:
+ * json_object_to_file{,_ext}, json_object_to_fd() or
  * json_object_from_{file,fd}, or NULL if there is none.
  */
 const char *json_util_get_last_err(void);
